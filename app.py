@@ -1,24 +1,25 @@
 import streamlit as st
 import pandas as pd
 
-st.title("Emergency Signal Monitoring System")
+st.title("Ultrasonic Distance Warning System")
 
-pressed = st.checkbox("Emergency Button Pressed")
+distance = st.slider(
+    "Distance (cm)", 2, 100, 50
+)
 
-# TASK 3: Change the displayed interval to 250 ms
-blink_interval = 500
+st.metric("Object Distance", f"{distance} cm")
 
-if pressed:
-    st.error("EMERGENCY ACTIVATED")
-    st.write("LED Status: BLINKING")
-    st.metric("Blink Interval", f"{blink_interval} ms")
+# TASK 2: Change the threshold to 30
+if distance < 20:
+    st.error("WARNING: Object Too Close!")
+    st.write("Red LED: ON")
 else:
-    st.success("SYSTEM STANDBY")
-    st.write("LED Status: OFF")
+    st.success("SAFE DISTANCE")
+    st.write("Red LED: OFF")
 
 data = pd.DataFrame({
-    "Button State": ["Released", "Pressed"],
-    "LED Status": ["OFF", "BLINKING"]
+    "Distance (cm)": [50, 30, 25, 10]
 })
 
 st.dataframe(data)
+st.line_chart(data, y="Distance (cm)")
